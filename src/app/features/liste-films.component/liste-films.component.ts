@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-
+import { FilmApiService } from '../../core/services/film-api';
 import { Film } from '../../models/film.model';
 import { FilmService } from '../../core/services/film-service';
 

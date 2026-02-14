@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { FilmService } from 'C:/Users/Leonking200/cine-manager/src/app/core/services/film-service';
+import { FilmService } from '../../core/services/film-service';
 import { Film } from '../../models/film.model';
 
 @Component({

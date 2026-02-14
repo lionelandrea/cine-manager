@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs'; 
-import { Film } from 'C:/Users/Leonking200/cine-manager/src/app/models/film.model';
+import { Film } from '../../models/film.model';
 
 @Injectable({
   providedIn: 'root'
@@ -55,15 +55,34 @@ export class FilmService {
 
     return of(nouveauFilm);
   }
-
-
-  getFilmById(id: number): Observable<Film> {
-  return this.http.get<Film>(`${this.apiUrl}/${id}`);
+   getFilmById(id: number): Observable<Film> {
+  const film = this.filmsFictifs.find(f => f.id === id);
+  return of(film ? { ...film } : {
+    id,
+    titre: '',
+    editeur: '',
+    description: '',
+    imageUrl: '',
+    realisateur: ''
+  });
 }
 
 modifierFilm(id: number, film: Film): Observable<Film> {
-  return this.http.put<Film>(`${this.apiUrl}/${id}`, film);
+  const index = this.filmsFictifs.findIndex(f => f.id === id);
+
+  if (index === -1) {
+  
+    return of({ ...film, id });
+  }
+
+  const updated = { ...film, id };
+  this.filmsFictifs = this.filmsFictifs.map(f => (f.id === id ? updated : f));
+
+  return of(updated);
 }
+
+
+
 
   supprimerFilm(id: number): Observable<void> {
     this.filmsFictifs = this.filmsFictifs.filter(f => f.id !== id);

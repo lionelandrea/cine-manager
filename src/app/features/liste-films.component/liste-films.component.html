@@ -1,31 +1,76 @@
 <div class="container">
-  <header>
-    <h1> Catalogue Ciné-Manager</h1>
-    <p>Découvrez notre sélection de films</p>
+  <header class="header">
+    <div>
+      <h1>Catalogue Ciné-Manager</h1>
+      <p>Découvrez notre sélection de films</p>
+    </div>
+
+    <a class="btn btn-primary" routerLink="/ajouter">+ Ajouter un film</a>
   </header>
 
+  <section class="toolbar">
+    <div class="search">
+      <input
+        type="text"
+        placeholder="Rechercher un film..."
+        [(ngModel)]="query"
+        (input)="onSearch()"
+      />
+      <span class="hint">{{ filteredCount }} résultat(s)</span>
+    </div>
+
+    <select class="select" [(ngModel)]="sort" (change)="applyFilters()">
+      <option value="az">Titre : A → Z</option>
+      <option value="za">Titre : Z → A</option>
+    </select>
+  </section>
+
   <div class="grille-films">
-    @for (f of films; track f.id) {
-      <div class="card">
+    @for (f of filteredFilms; track f.id) {
+      <article class="card">
         <div class="card-image">
-          <img [src]="f.imageUrl" [alt]="f.titre">
+          <img
+            [src]="f.imageUrl || defaultImg"
+            [alt]="f.titre"
+            (error)="onImgError($event)"
+          />
         </div>
+
         <div class="card-body">
-          <span class="badge">Film</span>
-          <h3>{{ f.titre }}</h3>
-          <p class="realisateur">De : <strong>{{ f.editeur }}</strong></p>
-          <p class="description">{{ f.description }}</p>
-          
-          <div class="card-footer">
-            <button class="btn-delete" (click)="supprimer(f.id!)">
+          <div class="top">
+            <span class="badge">Film</span>
+            <div class="actions">
+              <a class="btn btn-ghost" [routerLink]="['/modifier', f.id]">Modifier</a>
+              <button class="btn btn-danger" (click)="confirmDelete(f.id!)">
                 Supprimer
-            </button>
+              </button>
+            </div>
           </div>
+
+          <h3 class="title">{{ f.titre }}</h3>
+
+          <p class="meta">
+            Éditeur : <strong>{{ f.editeur || '—' }}</strong>
+            <span class="dot">•</span>
+            Réalisateur : <strong>{{ f.realisateur || '—' }}</strong>
+          </p>
+
+          <p class="description">
+            {{ isExpanded(f.id!) ? f.description : shortText(f.description, 160) }}
+          </p>
+
+          @if ((f.description?.length || 0) > 160) {
+            <button class="btn btn-link" (click)="toggleExpand(f.id!)">
+              {{ isExpanded(f.id!) ? 'Voir moins' : 'Voir plus' }}
+            </button>
+          }
         </div>
-      </div>
+      </article>
     } @empty {
       <div class="no-films">
-        <p>Aucun film disponible dans le catalogue.</p>
+        <h3>Aucun film disponible</h3>
+        <p>Ajoute ton premier film pour commencer le catalogue.</p>
+        <a class="btn btn-primary" routerLink="/ajouter">Ajouter un film</a>
       </div>
     }
   </div>

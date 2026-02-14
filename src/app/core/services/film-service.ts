@@ -42,17 +42,31 @@ export class FilmService {
 
  
   getFilms(): Observable<Film[]> {
-    
-    return this.filmsFictifs ? of(this.filmsFictifs) : this.http.get<Film[]>(this.apiUrl);
+    return of(this.filmsFictifs);
   }
-
   
   ajouterFilm(film: Film): Observable<Film> {
-    return this.http.post<Film>(this.apiUrl, film);
+    const nextId = this.filmsFictifs.length
+      ? Math.max(...this.filmsFictifs.map(f => f.id ?? 0)) + 1
+      : 1;
+
+    const nouveauFilm = { ...film, id: nextId };
+    this.filmsFictifs = [nouveauFilm, ...this.filmsFictifs];
+
+    return of(nouveauFilm);
   }
 
-  
+
+  getFilmById(id: number): Observable<Film> {
+  return this.http.get<Film>(`${this.apiUrl}/${id}`);
+}
+
+modifierFilm(id: number, film: Film): Observable<Film> {
+  return this.http.put<Film>(`${this.apiUrl}/${id}`, film);
+}
+
   supprimerFilm(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    this.filmsFictifs = this.filmsFictifs.filter(f => f.id !== id);
+    return of(void 0);
   }
 }

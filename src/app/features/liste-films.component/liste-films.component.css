@@ -1,101 +1,192 @@
 .container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
+  width: min(1100px, 92%);
+  margin: 28px auto;
+  color: #0f172a;
 }
 
-header {
-  text-align: center;
-  margin-bottom: 40px;
+.header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
 }
 
-h1 {
-  color: #2c3e50;
-  font-size: 2.5rem;
-  margin-bottom: 5px;
+.header h1 {
+  margin: 0;
+  font-size: 28px;
 }
 
-/* La Grille (Phase 2) */
+.header p {
+  margin: 6px 0 0;
+  color: #64748b;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin: 14px 0 18px;
+}
+
+.search {
+  flex: 1;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.search input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  background: rgba(255, 255, 255, 0.7);
+  outline: none;
+}
+
+.search input:focus {
+  border-color: rgba(99, 102, 241, 0.6);
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.18);
+}
+
+.hint {
+  color: #64748b;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.select {
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  background: rgba(255, 255, 255, 0.7);
+}
+
 .grille-films {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 30px;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
 }
 
-/* La Carte */
 .card {
-  background: #fff;
-  border-radius: 15px;
+  border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  display: flex;
-  flex-direction: column;
+  border: 1px solid rgba(15, 23, 42, 0.10);
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 8px 26px rgba(15, 23, 42, 0.08);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-/* Effet de zoom au survol (Phase 2) */
 .card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 34px rgba(15, 23, 42, 0.12);
+}
+
+.card-image {
+  height: 180px;
+  background: #0b1220;
 }
 
 .card-image img {
   width: 100%;
-  height: 400px;
+  height: 100%;
   object-fit: cover;
+  display: block;
 }
 
 .card-body {
-  padding: 20px;
+  padding: 14px;
+}
+
+.top {
   display: flex;
-  flex-direction: column;
-  flex-grow: 1;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
 }
 
 .badge {
-  background: #e74c3c;
-  color: white;
-  padding: 3px 10px;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  align-self: flex-start;
-  margin-bottom: 10px;
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(99, 102, 241, 0.15);
+  color: #3730a3;
+  font-weight: 700;
+  font-size: 12px;
 }
 
-h3 {
-  margin: 0 0 10px 0;
-  color: #34495e;
+.actions {
+  display: flex;
+  gap: 8px;
 }
 
-.realisateur {
-  color: #7f8c8d;
-  font-size: 0.9rem;
-  margin-bottom: 15px;
+.title {
+  margin: 10px 0 6px;
+  font-size: 18px;
+}
+
+.meta {
+  margin: 0 0 10px;
+  color: #475569;
+  font-size: 13px;
+}
+
+.dot {
+  margin: 0 6px;
+  opacity: 0.5;
 }
 
 .description {
-  font-size: 0.95rem;
-  color: #555;
-  line-height: 1.4;
-  margin-bottom: 20px;
+  margin: 0;
+  color: #334155;
+  line-height: 1.45;
 }
 
-.card-footer {
-  margin-top: auto;
-}
-
-.btn-delete {
-  width: 100%;
-  background: #fdf0f0;
-  color: #e74c3c;
-  border: 1px solid #fab1a0;
-  padding: 8px;
-  border-radius: 8px;
+.btn {
+  border: 0;
   cursor: pointer;
-  transition: 0.2s;
+  font-weight: 700;
+  border-radius: 12px;
+  padding: 10px 12px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.btn-delete:hover {
-  background: #e74c3c;
+.btn-primary {
+  background: #111827;
   color: white;
+}
+
+.btn-ghost {
+  background: rgba(15, 23, 42, 0.06);
+  color: #111827;
+  padding: 8px 10px;
+}
+
+.btn-danger {
+  background: rgba(239, 68, 68, 0.12);
+  color: #b91c1c;
+  padding: 8px 10px;
+}
+
+.btn-link {
+  margin-top: 8px;
+  padding: 0;
+  background: transparent;
+  color: #4f46e5;
+  border-radius: 0;
+}
+
+.no-films {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 30px 12px;
+  border: 1px dashed rgba(15, 23, 42, 0.18);
+  border-radius: 16px;
+  color: #475569;
 }

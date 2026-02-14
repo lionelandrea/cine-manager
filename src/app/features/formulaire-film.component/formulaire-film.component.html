@@ -1,0 +1,27 @@
+<div class="form-container">
+  <h2>Ajouter un nouveau film</h2>
+  
+  <form (ngSubmit)="ajouter()">
+    <div class="field">
+      <label>Titre :</label>
+      <input type="text" [(ngModel)]="nouveauFilm.titre" name="titre" required>
+    </div>
+
+    <div class="field">
+      <label>editeur :</label>
+      <input type="text" [(ngModel)]="nouveauFilm.editeur" name="editeur" required>
+    </div>
+
+    <div class="field">
+      <label>Description :</label>
+      <textarea [(ngModel)]="nouveauFilm.description" name="description"></textarea>
+    </div>
+
+    <div class="field">
+      <label>URL de l'image :</label>
+      <input type="text" [(ngModel)]="nouveauFilm.imageUrl" name="imageUrl">
+    </div>
+
+    <button type="submit" class="btn-submit">Enregistrer le film</button>
+  </form>
+</div>

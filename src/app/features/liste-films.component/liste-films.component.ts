@@ -12,7 +12,7 @@ type SortMode = 'az' | 'za';
   standalone: true,
   imports: [RouterLink, CommonModule, FormsModule],
   templateUrl: './liste-films.component.html',
-  styleUrls: ['./liste-films.component.css'], // ✅ correction
+  styleUrls: ['./liste-films.component.css'],
 })
 export class ListeFilmsComponent implements OnInit {
   films: Film[] = [];
@@ -46,6 +46,13 @@ export class ListeFilmsComponent implements OnInit {
     });
   }
 
+  imgSrc(url?: string | null): string {
+    if (!url) return this.defaultImg;
+    const u = url.trim();
+    if (u.startsWith('http://') || u.startsWith('https://')) return u;
+    return `http://localhost:8080/${u.replace(/^\/+/, '')}`;
+  }
+
   onSearch(): void {
     this.applyFilters();
   }
@@ -71,23 +78,21 @@ export class ListeFilmsComponent implements OnInit {
   }
 
   confirmDelete(id?: number) {
-  if (id == null) return;
-  const ok = confirm('Supprimer ce film ?');
-  if (!ok) return;
+    if (id == null) return;
+    const ok = confirm('Supprimer ce film ?');
+    if (!ok) return;
 
-  this.filmService.supprimerFilm(id).subscribe({
-    next: () => {
-      
-      this.films = this.films.filter(f => f.id !== id);
-      this.applyFilters(); 
-    },
-    error: (err: unknown) => {
-      console.error(err);
-      alert("Échec de suppression (API).");
-    }
-  });
-}
-
+    this.filmService.supprimerFilm(id).subscribe({
+      next: () => {
+        this.films = this.films.filter((f) => f.id !== id);
+        this.applyFilters();
+      },
+      error: (err: unknown) => {
+        console.error(err);
+        alert('Échec de suppression (API).');
+      },
+    });
+  }
 
   onImgError(event: Event): void {
     const img = event.target as HTMLImageElement;

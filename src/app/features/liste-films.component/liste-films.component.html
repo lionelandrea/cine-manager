@@ -28,25 +28,30 @@
   <div class="grille-films">
     @for (f of filteredFilms; track f.id) {
       <article class="card">
+        <div class="poster">
+          <img
+            [src]="imgSrc(f.imageUrl)"
+            (error)="onImgError($event)"
+            alt=""
+          />
+        </div>
+
         <div class="card-body">
           <div class="top">
             <span class="badge">Film</span>
             <div class="actions">
               <a class="btn btn-ghost" [routerLink]="['/modifier', f.id]">Modifier</a>
-              <button class="btn btn-danger" (click)="confirmDelete(f.id!)">
-                Supprimer
-              </button>
+              <button class="btn btn-danger" (click)="confirmDelete(f.id!)">Supprimer</button>
             </div>
           </div>
 
           <h3 class="title">{{ f.titre }}</h3>
 
           <p class="meta">
-              Éditeur : <strong>{{ f.editeur || '—' }}</strong>
-                   <span class="dot">•</span>
-              Réalisateur : <strong>{{ f.realisateur || '—' }}</strong>
+            Éditeur : <strong>{{ f.editeur || '—' }}</strong>
+            <span class="dot">•</span>
+            Réalisateur : <strong>{{ f.realisateur || '—' }}</strong>
           </p>
-
         </div>
       </article>
     } @empty {

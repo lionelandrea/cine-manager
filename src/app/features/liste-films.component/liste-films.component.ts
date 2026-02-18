@@ -26,21 +26,68 @@ export class ListeFilmsComponent implements OnInit {
 
   private expanded = new Set<number>();
 
+  
+  private filmsParDefaut: Film[] = [
+    {
+      id: 1,
+      titre: 'Inception',
+      editeur: 'Warner Bros',
+      description: 'Un film de science-fiction basé sur les rêves.',
+      realisateur: 'Christopher Nolan',
+      imageUrl: 'https://m.media-amazon.com/images/I/51s+Q9f2YCL._AC_.jpg',
+    },
+    {
+      id: 2,
+      titre: 'Interstellar',
+      editeur: 'Paramount',
+      description: 'Voyage spatial pour sauver l’humanité.',
+      realisateur: 'Christopher Nolan',
+      imageUrl: 'https://m.media-amazon.com/images/I/71n58VJ9GEL._AC_SL1200_.jpg',
+    },
+    {
+      id: 3,
+      titre: 'Avatar',
+      editeur: '20th Century Fox',
+      description: 'Une aventure spectaculaire sur Pandora.',
+      realisateur: 'James Cameron',
+      imageUrl: 'https://m.media-amazon.com/images/I/41kTVLeW1CL._AC_.jpg',
+    },
+    
+  ];
+
   constructor(private filmService: FilmService) {}
 
   ngOnInit(): void {
-    this.loadFilms();
+     this.filmService.getFilms().subscribe((data: Film[]) => {
+    const apiFilms = Array.isArray(data) ? data : [];
+
+  
+    this.films = apiFilms.length > 0 ? apiFilms : this.filmService.filmsParDefaut;
+
+    
+    this.applyFilters();
+
+    
+    console.log('films:', this.films);
+    console.log('filteredFilms:', this.filteredFilms);
+  });
   }
 
   loadFilms(): void {
     this.filmService.getFilms().subscribe({
-      next: (data) => {
-        this.films = Array.isArray(data) ? data : [];
+      next: (data: Film[]) => {
+        const apiFilms = Array.isArray(data) ? data : [];
+
+    
+        this.films = apiFilms.length > 0 ? apiFilms : this.filmsParDefaut;
+
         this.applyFilters();
       },
       error: (err) => {
         console.error('Erreur API getFilms:', err);
-        this.films = [];
+
+      
+        this.films = this.filmsParDefaut;
         this.applyFilters();
       },
     });
@@ -48,8 +95,11 @@ export class ListeFilmsComponent implements OnInit {
 
   imgSrc(url?: string | null): string {
     if (!url) return this.defaultImg;
+
     const u = url.trim();
+
     if (u.startsWith('http://') || u.startsWith('https://')) return u;
+
     return `http://localhost:8080/${u.replace(/^\/+/, '')}`;
   }
 
@@ -64,12 +114,14 @@ export class ListeFilmsComponent implements OnInit {
       const titre = (f.titre ?? '').toLowerCase();
       const editeur = (f.editeur ?? '').toLowerCase();
       const real = (f.realisateur ?? '').toLowerCase();
+
       return titre.includes(q) || editeur.includes(q) || real.includes(q);
     });
 
     list = list.sort((a, b) => {
       const A = (a.titre ?? '').toLowerCase();
       const B = (b.titre ?? '').toLowerCase();
+
       return this.sort === 'az' ? A.localeCompare(B) : B.localeCompare(A);
     });
 
@@ -77,8 +129,9 @@ export class ListeFilmsComponent implements OnInit {
     this.filteredCount = list.length;
   }
 
-  confirmDelete(id?: number) {
+  confirmDelete(id?: number): void {
     if (id == null) return;
+
     const ok = confirm('Supprimer ce film ?');
     if (!ok) return;
 
@@ -106,6 +159,7 @@ export class ListeFilmsComponent implements OnInit {
 
   toggleExpand(id?: number): void {
     if (id == null) return;
+
     if (this.expanded.has(id)) this.expanded.delete(id);
     else this.expanded.add(id);
   }

@@ -16,7 +16,7 @@
         [(ngModel)]="query"
         (input)="onSearch()"
       />
-      <span class="hint">{{ filteredCount }} résultat(s)</span>
+      <span class="hint">{{ (filteredFilms?.length ?? 0) }} résultat(s)</span>
     </div>
 
     <select class="select" [(ngModel)]="sort" (change)="applyFilters()">
@@ -26,7 +26,7 @@
   </section>
 
   <div class="grille-films">
-    @for (f of filteredFilms; track f.id) {
+    @for (f of ((filteredFilms && filteredFilms.length > 0) ? filteredFilms : films); track f.id) {
       <article class="card">
         <div class="poster">
           <img

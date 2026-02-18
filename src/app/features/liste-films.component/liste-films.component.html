@@ -28,14 +28,6 @@
   <div class="grille-films">
     @for (f of filteredFilms; track f.id) {
       <article class="card">
-        <div class="card-image">
-          <img
-            [src]="f.imageUrl || defaultImg"
-            [alt]="f.titre"
-            (error)="onImgError($event)"
-          />
-        </div>
-
         <div class="card-body">
           <div class="top">
             <span class="badge">Film</span>
@@ -50,20 +42,11 @@
           <h3 class="title">{{ f.titre }}</h3>
 
           <p class="meta">
-            Éditeur : <strong>{{ f.editeur || '—' }}</strong>
-            <span class="dot">•</span>
-            Réalisateur : <strong>{{ f.realisateur || '—' }}</strong>
+              Éditeur : <strong>{{ f.editeur || '—' }}</strong>
+                   <span class="dot">•</span>
+              Réalisateur : <strong>{{ f.realisateur || '—' }}</strong>
           </p>
 
-          <p class="description">
-            {{ isExpanded(f.id!) ? f.description : shortText(f.description, 160) }}
-          </p>
-
-          @if ((f.description?.length || 0) > 160) {
-            <button class="btn btn-link" (click)="toggleExpand(f.id!)">
-              {{ isExpanded(f.id!) ? 'Voir moins' : 'Voir plus' }}
-            </button>
-          }
         </div>
       </article>
     } @empty {

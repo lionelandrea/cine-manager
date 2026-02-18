@@ -9,7 +9,7 @@ import { Film } from '../../models/film.model';
   standalone: true,
   imports: [FormsModule],
   templateUrl: './formulaire-film.component.html',
-  styleUrl: './formulaire-film.component.css',
+  styleUrls: ['./formulaire-film.component.css'],
 })
 export class FormulaireFilmComponent implements OnInit {
   isEdit = false;
@@ -18,7 +18,6 @@ export class FormulaireFilmComponent implements OnInit {
 
   
   nouveauFilm: Film = {
-    id: undefined,
     titre: '',
     editeur: '',
     description: '',
@@ -34,38 +33,68 @@ export class FormulaireFilmComponent implements OnInit {
 
   ngOnInit(): void {
     const idParam = this.route.snapshot.paramMap.get('id');
+
+    
     if (idParam) {
       this.isEdit = true;
       this.id = Number(idParam);
 
+      if (Number.isNaN(this.id)) {
+        this.error = "ID invalide.";
+        return;
+      }
+
       this.filmService.getFilmById(this.id).subscribe({
-        next: (film) => (this.nouveauFilm = film),
-        error: () => (this.error = "Impossible de charger le film à modifier."),
+        next: (film: Film) => {
+          
+          this.nouveauFilm = film;
+        },
+        error: (err: unknown) => {
+          console.error(err);
+          this.error = "Impossible de charger le film à modifier.";
+        },
       });
     }
   }
 
   
-  ajouter() {
+  enregistrer(): void {
     this.error = '';
 
-    if (!this.nouveauFilm.titre?.trim()) {
+    if (!this.nouveauFilm.titre.trim()) {
       this.error = 'Le titre est obligatoire.';
       return;
+    }
+
+    
+    if (this.nouveauFilm.imageUrl && !this.nouveauFilm.imageUrl.trim()) {
+      this.nouveauFilm.imageUrl = '';
     }
 
     if (this.isEdit && this.id !== null) {
       this.filmService.modifierFilm(this.id, this.nouveauFilm).subscribe({
         next: () => this.router.navigateByUrl('/'),
-        error: () => (this.error = 'Échec de la modification.'),
+        error: (err: unknown) => {
+          console.error(err);
+          this.error = 'Échec de la modification.';
+        },
       });
     } else {
-      this.filmService.ajouterFilm(this.nouveauFilm).subscribe({
+      
+      const { id, ...payload } = this.nouveauFilm;
+
+      this.filmService.ajouterFilm(payload as Film).subscribe({
         next: () => this.router.navigateByUrl('/'),
-        error: () => (this.error = "Échec de l'enregistrement."),
+        error: (err: unknown) => {
+          console.error(err);
+          this.error = "Échec de l'enregistrement.";
+        },
       });
     }
   }
-}
 
+  annuler(): void {
+    this.router.navigateByUrl('/');
+  }
+}
 
